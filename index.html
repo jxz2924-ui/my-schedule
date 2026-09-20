@@ -1,0 +1,64 @@
+<!doctype html>
+<!--
+  程序功能：2026 年秋季学期个人课表 PWA，支持按周查看、今日课程、总课表和离线使用。
+  使用方法：通过本地静态服务器或 HTTPS 打开本文件；在手机浏览器菜单中选择“添加到主屏幕”即可安装。
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f1e8">
+  <meta name="description" content="2026 年秋季学期个人课表">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="stylesheet" href="styles.css">
+  <title>我的课表 · 2026 秋</title>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero__top">
+      <div>
+        <p class="eyebrow">2026 AUTUMN</p>
+        <h1>我的课表</h1>
+      </div>
+      <button id="installButton" class="icon-button" type="button" hidden aria-label="安装课表应用">安装</button>
+    </div>
+    <div class="week-status">
+      <div>
+        <span id="statusLabel">今天</span>
+        <strong id="currentDate">正在读取日期</strong>
+      </div>
+      <div class="week-badge"><span>第</span><strong id="currentWeek">—</strong><span>周</span></div>
+    </div>
+  </header>
+
+  <main>
+    <nav class="view-tabs" aria-label="课表视图">
+      <button class="tab is-active" type="button" data-view="week">本周</button>
+      <button class="tab" type="button" data-view="today">今天</button>
+      <button class="tab" type="button" data-view="all">总课表</button>
+    </nav>
+
+    <section id="weekControls" class="week-controls" aria-label="教学周选择">
+      <button id="previousWeek" class="arrow-button" type="button" aria-label="上一周">←</button>
+      <button id="weekPickerButton" class="week-picker" type="button">
+        <span id="selectedWeekLabel">第 1 周</span>
+        <small id="selectedWeekDates">9月7日—9月13日</small>
+      </button>
+      <button id="nextWeek" class="arrow-button" type="button" aria-label="下一周">→</button>
+      <select id="weekSelect" aria-label="选择教学周"></select>
+    </section>
+
+    <section id="summary" class="summary" aria-live="polite"></section>
+    <section id="schedule" class="schedule" aria-live="polite"></section>
+  </main>
+
+  <footer>
+    <span>共 13 门课程 · 23.5 学分</span>
+    <span id="offlineState">可离线使用</span>
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

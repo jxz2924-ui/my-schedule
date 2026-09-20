@@ -1,0 +1,19 @@
+{
+  "name": "我的课表 · 2026 秋",
+  "short_name": "我的课表",
+  "description": "2026 年秋季学期个人课表",
+  "lang": "zh-CN",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f1e8",
+  "theme_color": "#f5f1e8",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

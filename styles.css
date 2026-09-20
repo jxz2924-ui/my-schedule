@@ -1,0 +1,253 @@
+/*
+ * 程序功能：定义手机课表 PWA 的视觉样式与响应式布局。
+ * 使用方法：由 index.html 自动加载；颜色和尺寸变量集中在文件前部，可按需修改。
+ */
+
+/* 可修改参数：全局颜色、圆角和阴影 */
+:root {
+  --paper: #f5f1e8;
+  --paper-deep: #ebe4d7;
+  --ink: #202924;
+  --muted: #6d756f;
+  --line: rgba(32, 41, 36, 0.12);
+  --accent: #f06b46;
+  --accent-dark: #c4482e;
+  --card: rgba(255, 253, 248, 0.88);
+  --radius: 22px;
+  --shadow: 0 12px 36px rgba(49, 55, 47, 0.09);
+}
+
+* { box-sizing: border-box; }
+
+html { background: var(--paper); }
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 88% 4%, rgba(240, 107, 70, 0.17), transparent 28rem),
+    linear-gradient(180deg, #faf7f0 0, var(--paper) 24rem);
+  font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+button, select { font: inherit; }
+button { color: inherit; }
+
+.hero, main, footer {
+  width: min(100% - 32px, 760px);
+  margin-inline: auto;
+}
+
+.hero { padding: max(26px, env(safe-area-inset-top)) 0 20px; }
+.hero__top, .week-status, .week-controls, footer { display: flex; align-items: center; justify-content: space-between; }
+
+.eyebrow {
+  margin: 0 0 5px;
+  color: var(--accent-dark);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+h1 { margin: 0; font-family: Georgia, "Songti SC", serif; font-size: clamp(2rem, 9vw, 3.5rem); line-height: 1; }
+
+.icon-button, .arrow-button {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.52);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.icon-button { padding: 9px 14px; font-size: 0.82rem; font-weight: 700; }
+
+.week-status {
+  margin-top: 28px;
+  padding: 18px 20px;
+  color: #fffaf2;
+  background: var(--ink);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.week-status span { display: block; color: rgba(255,255,255,.62); font-size: .72rem; }
+.week-status strong { display: block; margin-top: 3px; font-size: 1rem; }
+.week-badge { display: flex; align-items: baseline; gap: 4px; }
+.week-badge span { display: inline; }
+.week-badge strong { margin: 0; color: #ffb49c; font: 700 2.2rem/1 Georgia, serif; }
+
+.view-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 4px;
+  background: var(--paper-deep);
+  border-radius: 16px;
+}
+
+.tab {
+  padding: 10px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.tab.is-active { color: var(--ink); background: #fff; box-shadow: 0 4px 14px rgba(40, 44, 40, .08); }
+
+.week-controls { position: relative; padding: 20px 0 10px; }
+.arrow-button { width: 42px; height: 42px; font-size: 1.1rem; }
+.arrow-button:disabled { opacity: .28; cursor: default; }
+.week-picker { min-width: 150px; border: 0; background: transparent; cursor: pointer; }
+.week-picker span, .week-picker small { display: block; }
+.week-picker span { font-size: 1.08rem; font-weight: 800; }
+.week-picker small { margin-top: 4px; color: var(--muted); }
+#weekSelect { position: absolute; inset: 20px 52px 10px; opacity: 0; pointer-events: none; }
+
+.summary { margin: 8px 0 16px; color: var(--muted); font-size: .86rem; }
+.schedule { display: grid; gap: 14px; }
+
+/* 本周二维课表：手机端横向滚动，左侧时间列保持可见 */
+.timetable-hint { display: none; color: var(--muted); font-size: .74rem; text-align: center; }
+.timetable-scroll {
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 253, 248, .72);
+  box-shadow: var(--shadow);
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+}
+
+.timetable-grid {
+  display: grid;
+  grid-template-columns: 74px repeat(7, minmax(132px, 1fr));
+  grid-template-rows: 58px repeat(13, 68px);
+  min-width: 998px;
+  position: relative;
+}
+
+.grid-corner, .grid-day, .grid-time {
+  position: sticky;
+  z-index: 5;
+  background: #ebe7dd;
+}
+
+.grid-corner {
+  grid-column: 1;
+  grid-row: 1;
+  left: 0;
+  top: 0;
+  display: grid;
+  place-content: center;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+.grid-corner strong, .grid-corner span { display: block; }
+.grid-corner strong { font-size: .78rem; }
+.grid-corner span { color: var(--muted); font-size: .62rem; }
+
+.grid-day {
+  grid-row: 1;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.grid-day strong { font-size: .85rem; }
+.grid-day span { color: var(--muted); font-size: .68rem; }
+.grid-day.is-today { color: var(--accent-dark); background: #ffe2d7; }
+
+.grid-time {
+  grid-column: 1;
+  left: 0;
+  display: grid;
+  grid-template-columns: 23px 1fr;
+  align-items: center;
+  padding: 4px 5px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+.grid-time strong { font: 700 1rem/1 Georgia, serif; }
+.grid-time span { color: var(--muted); font-size: .58rem; line-height: 1.45; }
+.grid-cell { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+
+.grid-course {
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+  margin: 3px;
+  padding: 9px 8px;
+  overflow: hidden;
+  border-radius: 10px;
+  border-left: 4px solid currentColor;
+  box-shadow: 0 4px 10px rgba(34, 42, 37, .08);
+}
+.grid-course strong { font-size: .76rem; line-height: 1.35; }
+.grid-course span { font-size: .64rem; line-height: 1.25; }
+.grid-course__place { margin-top: auto; font-weight: 700; }
+.grid-course__time { opacity: .72; }
+.grid-course--coral { color: #a43f2c; background: #ffe0d5; }
+.grid-course--teal { color: #286a62; background: #d9efea; }
+.grid-course--blue { color: #345f96; background: #dce9f8; }
+.grid-course--amber { color: #855d15; background: #f8e9bd; }
+.grid-course--violet { color: #66518f; background: #e8e0f5; }
+.grid-course--green { color: #406c3c; background: #dfeedd; }
+
+.day-card {
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid rgba(255,255,255,.75);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+}
+
+.day-card.is-today { outline: 2px solid rgba(240, 107, 70, .5); }
+.day-heading { display: flex; align-items: baseline; justify-content: space-between; padding: 17px 18px 12px; }
+.day-heading h2 { margin: 0; font-size: 1.05rem; }
+.day-heading span { color: var(--muted); font-size: .78rem; }
+
+.course { display: grid; grid-template-columns: 64px 1fr; gap: 13px; padding: 15px 18px; border-top: 1px solid var(--line); }
+.course__time { padding-top: 2px; }
+.course__time strong { display: block; font: 700 1.05rem/1.2 Georgia, serif; }
+.course__time span { color: var(--muted); font-size: .7rem; }
+.course__name { margin: 0 0 7px; font-size: .98rem; line-height: 1.45; }
+.course__meta { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill { padding: 4px 8px; border-radius: 7px; color: var(--muted); background: #eee9df; font-size: .72rem; }
+.pill--place { color: #2c6655; background: #dfefe9; }
+
+.empty { padding: 54px 22px; text-align: center; color: var(--muted); background: rgba(255,255,255,.48); border: 1px dashed var(--line); border-radius: var(--radius); }
+.empty strong { display: block; margin-bottom: 8px; color: var(--ink); font-size: 1.15rem; }
+
+footer { gap: 16px; padding: 28px 0 max(30px, env(safe-area-inset-bottom)); color: var(--muted); font-size: .72rem; }
+
+@media (min-width: 680px) {
+  .schedule { grid-template-columns: repeat(2, 1fr); align-items: start; }
+  .day-card.is-wide { grid-column: 1 / -1; }
+  .timetable-hint, .timetable-scroll { grid-column: 1 / -1; }
+}
+
+@media (max-width: 679px) {
+  .hero, main, footer { width: min(100% - 22px, 760px); }
+  .timetable-hint { display: block; margin: -2px 0 7px; }
+  .timetable-scroll { margin-inline: -11px; border-radius: 16px; }
+  .timetable-grid { grid-template-columns: 68px repeat(7, 126px); min-width: 950px; }
+  .grid-course { padding: 7px 6px; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .day-card { animation: rise .35s ease both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } }
+}
