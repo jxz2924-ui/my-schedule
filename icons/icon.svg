@@ -1,0 +1,11 @@
+<!--
+  程序功能：作为课表 PWA 的应用图标。
+  使用方法：由网页清单和页面图标链接自动引用，可直接用浏览器打开预览。
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="118" fill="#202924"/>
+  <rect x="82" y="107" width="348" height="322" rx="50" fill="#fffaf2"/>
+  <path d="M82 185h348" stroke="#f06b46" stroke-width="42"/>
+  <path d="M165 78v72M347 78v72" stroke="#fffaf2" stroke-width="32" stroke-linecap="round"/>
+  <path d="M151 260h65M296 260h65M151 339h65M296 339h65" stroke="#202924" stroke-width="28" stroke-linecap="round"/>
+</svg>
